@@ -1,0 +1,998 @@
+/* ============================================================
+   SafeTrans Website — style.css
+   Rust-themed minimalist dark design
+   ============================================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap');
+
+/* ── Reset & Base ─────────────────────────────────────────── */
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+:root {
+    /* Warm near-black backgrounds */
+    --bg-deep: #0e0b09;
+    --bg-card: #181210;
+    --bg-glass: rgba(255, 255, 255, 0.03);
+    --border: rgba(206, 48, 0, 0.14);
+    --border-glow: rgba(206, 48, 0, 0.38);
+
+    /* Rust brand palette */
+    --rust: #CE3000;
+    /* official Rust orange */
+    --rust-light: #E8572A;
+    /* lighter variant      */
+    --amber: #F59E0B;
+    /* warm secondary       */
+    --green: #4ade80;
+    --red: #f87171;
+
+    /* Keep old names pointing to rust so existing rules still work */
+    --blue-1: var(--rust-light);
+    --blue-2: var(--rust);
+    --blue-3: #a82500;
+    --cyan: var(--amber);
+    --purple: var(--rust-light);
+    --orange: var(--rust-light);
+
+    /* Warm text tones */
+    --text-1: #F5EFE8;
+    --text-2: #B0A098;
+    --text-3: #6B5C54;
+
+    --radius-sm: 6px;
+    --radius-md: 10px;
+    --radius-lg: 16px;
+    --radius-xl: 24px;
+
+    --shadow-glow: 0 0 32px rgba(206, 48, 0, 0.10);
+    --shadow-card: 0 2px 16px rgba(0, 0, 0, 0.5);
+
+    --max-w: 1100px;
+    --font: 'Inter', sans-serif;
+    --mono: 'JetBrains Mono', monospace;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: var(--font);
+    background: var(--bg-deep);
+    color: var(--text-1);
+    line-height: 1.7;
+    overflow-x: hidden;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+    width: 6px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--bg-deep);
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--rust);
+    border-radius: 3px;
+}
+
+/* ── Utility ──────────────────────────────────────────────── */
+.container {
+    max-width: var(--max-w);
+    margin: 0 auto;
+    padding: 0 24px;
+}
+
+.text-center {
+    text-align: center;
+}
+
+.text-gradient {
+    background: linear-gradient(135deg, var(--rust-light) 0%, var(--amber) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 5px 14px;
+    border-radius: 100px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    border: 1px solid var(--border-glow);
+    background: rgba(206, 48, 0, 0.10);
+    color: var(--rust-light);
+}
+
+.section-label {
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--blue-1);
+    margin-bottom: 10px;
+}
+
+.section-title {
+    font-size: clamp(1.6rem, 3vw, 2.2rem);
+    font-weight: 800;
+    line-height: 1.2;
+    margin-bottom: 16px;
+}
+
+.section-desc {
+    color: var(--text-2);
+    font-size: 1.05rem;
+    max-width: 640px;
+    margin: 0 auto;
+}
+
+/* ── Navbar ───────────────────────────────────────────────── */
+#navbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 100;
+    padding: 14px 0;
+    transition: background 0.3s, backdrop-filter 0.3s, box-shadow 0.3s;
+}
+
+#navbar.scrolled {
+    background: rgba(14, 11, 9, 0.94);
+    backdrop-filter: blur(20px);
+    box-shadow: 0 1px 0 var(--border);
+}
+
+.nav-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.nav-logo {
+    font-size: 1.2rem;
+    font-weight: 800;
+    background: linear-gradient(135deg, var(--rust-light), var(--amber));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    text-decoration: none;
+}
+
+.nav-links {
+    display: flex;
+    gap: 32px;
+    list-style: none;
+}
+
+.nav-links a {
+    color: var(--text-2);
+    text-decoration: none;
+    font-size: 0.9rem;
+    font-weight: 500;
+    transition: color 0.2s;
+}
+
+.nav-links a:hover,
+.nav-links a.active {
+    color: var(--blue-1);
+}
+
+/* ── Hero ─────────────────────────────────────────────────── */
+#hero {
+    min-height: 70vh;
+    display: flex;
+    align-items: center;
+    position: relative;
+    overflow: hidden;
+    padding: 90px 0 60px;
+}
+
+.hero-bg {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    background:
+        radial-gradient(ellipse 80% 60% at 50% -10%, rgba(206, 48, 0, 0.14) 0%, transparent 60%),
+        radial-gradient(ellipse 60% 40% at 80% 80%, rgba(232, 87, 42, 0.08) 0%, transparent 50%),
+        radial-gradient(ellipse 40% 30% at 10% 60%, rgba(245, 158, 11, 0.05) 0%, transparent 50%);
+}
+
+/* Animated grid */
+.hero-bg::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image:
+        linear-gradient(rgba(206, 48, 0, 0.05) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(206, 48, 0, 0.05) 1px, transparent 1px);
+    background-size: 60px 60px;
+    mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, black 40%, transparent 100%);
+}
+
+.hero-content {
+    position: relative;
+    z-index: 1;
+    text-align: center;
+}
+
+.hero-badge-row {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-bottom: 28px;
+}
+
+.hero-title {
+    font-size: clamp(3rem, 8vw, 6rem);
+    font-weight: 900;
+    line-height: 1.05;
+    letter-spacing: -0.03em;
+    margin-bottom: 20px;
+}
+
+.hero-subtitle {
+    font-size: clamp(1rem, 2.5vw, 1.3rem);
+    color: var(--text-2);
+    max-width: 680px;
+    margin: 0 auto 36px;
+    font-weight: 400;
+}
+
+/* minimal inline author list */
+.hero-authors {
+    font-size: 1rem;
+    color: var(--text-2);
+    margin: 0 auto 10px;
+    font-weight: 400;
+    letter-spacing: 0.01em;
+}
+
+.hero-authors sup {
+    font-size: 0.6em;
+    color: var(--blue-1);
+    font-weight: 700;
+    vertical-align: super;
+}
+
+.hero-affils {
+    font-size: 0.8rem;
+    color: var(--text-3);
+    margin: 0 auto 36px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: 6px;
+}
+
+.hero-affils sup {
+    font-size: 0.65em;
+    color: var(--blue-1);
+    font-weight: 700;
+    vertical-align: super;
+}
+
+.author-sep,
+.affil-sep {
+    margin: 0 6px;
+    color: var(--text-3);
+    font-weight: 300;
+}
+
+.btn-row {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+.btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 24px;
+    border-radius: var(--radius-sm);
+    font-size: 0.9rem;
+    font-weight: 600;
+    text-decoration: none;
+    cursor: pointer;
+    border: none;
+    transition: all 0.2s;
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, var(--rust), var(--rust-light));
+    color: #fff;
+    box-shadow: 0 4px 20px rgba(206, 48, 0, 0.35);
+}
+
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 28px rgba(206, 48, 0, 0.50);
+}
+
+.btn-outline {
+    background: transparent;
+    color: var(--text-1);
+    border: 1px solid var(--border);
+}
+
+.btn-outline:hover {
+    border-color: var(--border-glow);
+    color: var(--rust-light);
+    transform: translateY(-2px);
+}
+
+.btn svg {
+    width: 18px;
+    height: 18px;
+    flex-shrink: 0;
+}
+
+/* ── Sections ─────────────────────────────────────────────── */
+section {
+    padding: 96px 0;
+}
+
+section:nth-child(even) {
+    background: rgba(206, 48, 0, 0.025);
+}
+
+/* ── Abstract ─────────────────────────────────────────────── */
+#abstract .abstract-card {
+    max-width: 820px;
+    margin: 0 auto;
+    padding: 40px 48px;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-card);
+    backdrop-filter: blur(20px);
+    position: relative;
+    overflow: hidden;
+}
+
+#abstract .abstract-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--rust), var(--amber));
+}
+
+#abstract .abstract-card p {
+    color: var(--text-2);
+    font-size: 1.05rem;
+    line-height: 1.85;
+    text-align: justify;
+}
+
+#abstract .abstract-card p em {
+    color: var(--rust-light);
+    font-style: normal;
+    font-weight: 600;
+}
+
+/* ── Stats ────────────────────────────────────────────────── */
+#stats {
+    padding: 72px 0;
+}
+
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 12px;
+}
+
+.stat-card {
+    padding: 20px 14px;
+    text-align: center;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-card);
+    transition: border-color 0.3s, transform 0.3s;
+    position: relative;
+    overflow: hidden;
+}
+
+.stat-card::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--rust-light), transparent);
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+.stat-card:hover {
+    border-color: var(--border-glow);
+    transform: translateY(-4px);
+}
+
+.stat-card:hover::after {
+    opacity: 1;
+}
+
+.stat-icon {
+    font-size: 1.4rem;
+    margin-bottom: 8px;
+}
+
+.stat-value {
+    font-size: 1.8rem;
+    font-weight: 900;
+    background: linear-gradient(135deg, var(--rust-light), var(--amber));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    line-height: 1;
+    margin-bottom: 6px;
+}
+
+.stat-label {
+    font-size: 0.85rem;
+    color: var(--text-2);
+    font-weight: 500;
+}
+
+.stat-sub {
+    font-size: 0.75rem;
+    color: var(--text-3);
+    margin-top: 4px;
+}
+
+/* ── Pipeline ─────────────────────────────────────────────── */
+#pipeline .pipeline-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 0;
+    position: relative;
+    margin-top: 56px;
+}
+
+.pipe-step {
+    padding: 32px 24px;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    position: relative;
+    transition: border-color 0.3s, transform 0.3s;
+    margin: 0 -1px;
+}
+
+.pipe-step:first-child {
+    border-radius: var(--radius-md) 0 0 var(--radius-md);
+}
+
+.pipe-step:last-child {
+    border-radius: 0 var(--radius-md) var(--radius-md) 0;
+}
+
+.pipe-step:hover {
+    border-color: var(--border-glow);
+    transform: translateY(-4px);
+    z-index: 1;
+}
+
+.pipe-num {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--blue-2), var(--blue-3));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.85rem;
+    font-weight: 800;
+    color: #fff;
+    margin-bottom: 16px;
+    box-shadow: 0 4px 12px rgba(14, 165, 233, 0.4);
+}
+
+.pipe-icon {
+    font-size: 1.8rem;
+    margin-bottom: 12px;
+}
+
+.pipe-title {
+    font-size: 1rem;
+    font-weight: 700;
+    margin-bottom: 8px;
+    color: var(--text-1);
+}
+
+.pipe-desc {
+    font-size: 0.85rem;
+    color: var(--text-2);
+    line-height: 1.6;
+}
+
+/* ── Methodology Diagram ─────────────────────────────────── */
+.diag-wrap {
+    margin: 48px auto 0;
+    max-width: 900px;
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    border: 1px solid var(--border);
+    box-shadow: var(--shadow-card);
+    background: #ffffff;
+    padding: 20px;
+}
+
+.diag-img {
+    display: block;
+    width: 100%;
+    height: auto;
+}
+
+/* ── Pipeline step list (below diagram) ──────────────────── */
+.pipe-steps-list {
+    margin-top: 40px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    max-width: 900px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.pipe-list-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 20px;
+    padding: 20px 24px;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    transition: border-color 0.25s, transform 0.25s;
+}
+
+.pipe-list-item:hover {
+    border-color: var(--border-glow);
+    transform: translateX(4px);
+}
+
+.pipe-list-item .pipe-num {
+    flex-shrink: 0;
+    margin-bottom: 0;
+}
+
+.pipe-list-item .pipe-title {
+    font-size: 1rem;
+    font-weight: 700;
+    margin-bottom: 4px;
+    color: var(--blue-1);
+}
+
+.pipe-list-item .pipe-desc {
+    font-size: 0.9rem;
+    color: var(--text-2);
+    line-height: 1.65;
+}
+
+
+/* ── Methodology Tabs ─────────────────────────────────────── */
+#methodology .tab-bar {
+    display: flex;
+    gap: 4px;
+    background: var(--bg-glass);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 4px;
+    width: fit-content;
+    margin: 40px auto 0;
+}
+
+.tab-btn {
+    padding: 10px 24px;
+    border-radius: 6px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    border: none;
+    background: transparent;
+    color: var(--text-2);
+    transition: all 0.2s;
+}
+
+.tab-btn.active {
+    background: linear-gradient(135deg, var(--blue-2), var(--blue-3));
+    color: #fff;
+    box-shadow: 0 2px 12px rgba(14, 165, 233, 0.4);
+}
+
+.tab-btn:not(.active):hover {
+    color: var(--text-1);
+}
+
+.tab-content {
+    display: none;
+    margin-top: 40px;
+}
+
+.tab-content.active {
+    display: block;
+}
+
+.method-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+    align-items: start;
+}
+
+.method-card {
+    padding: 32px;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-card);
+}
+
+.method-card h3 {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--rust-light);
+    margin-bottom: 14px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.method-card p {
+    color: var(--text-2);
+    font-size: 0.95rem;
+    line-height: 1.7;
+}
+
+.method-card ul {
+    list-style: none;
+    margin-top: 14px;
+}
+
+.method-card ul li {
+    padding: 6px 0;
+    color: var(--text-2);
+    font-size: 0.9rem;
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+}
+
+.method-card ul li::before {
+    content: '→';
+    color: var(--rust-light);
+    font-weight: 700;
+    flex-shrink: 0;
+    margin-top: 1px;
+}
+
+/* ── Results Table ────────────────────────────────────────── */
+#results .table-wrap {
+    overflow-x: auto;
+    margin-top: 48px;
+    border-radius: var(--radius-md);
+    border: 1px solid var(--border);
+    box-shadow: var(--shadow-card);
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.9rem;
+}
+
+thead tr {
+    background: rgba(206, 48, 0, 0.10);
+}
+
+thead th {
+    padding: 16px 20px;
+    text-align: left;
+    font-weight: 700;
+    color: var(--blue-1);
+    font-size: 0.8rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    white-space: nowrap;
+    border-bottom: 1px solid var(--border);
+}
+
+tbody tr {
+    border-bottom: 1px solid var(--border);
+    transition: background 0.15s;
+}
+
+tbody tr:last-child {
+    border-bottom: none;
+}
+
+tbody tr:hover {
+    background: rgba(206, 48, 0, 0.05);
+}
+
+tbody td {
+    padding: 14px 20px;
+    color: var(--text-2);
+    vertical-align: middle;
+}
+
+tbody td:first-child {
+    color: var(--text-1);
+    font-weight: 600;
+}
+
+.bar-cell {
+    min-width: 140px;
+}
+
+.bar-wrap {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.bar-bg {
+    flex: 1;
+    height: 6px;
+    background: rgba(255, 255, 255, 0.06);
+    border-radius: 3px;
+    overflow: hidden;
+}
+
+.bar-fill {
+    height: 100%;
+    border-radius: 3px;
+    background: linear-gradient(90deg, var(--rust), var(--amber));
+    transition: width 1s ease;
+}
+
+.bar-val {
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: var(--text-1);
+    white-space: nowrap;
+}
+
+.highlight-row td {
+    color: var(--text-1) !important;
+}
+
+.highlight-row {
+    background: rgba(56, 189, 248, 0.06) !important;
+}
+
+.tag-best {
+    display: inline-block;
+    padding: 2px 8px;
+    background: rgba(52, 211, 153, 0.15);
+    color: var(--green);
+    border-radius: 4px;
+    font-size: 0.72rem;
+    font-weight: 700;
+    margin-left: 6px;
+    vertical-align: middle;
+}
+
+/* ── Vulnerability ────────────────────────────────────────── */
+#vulnerability .vuln-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    margin-top: 48px;
+}
+
+.vuln-card {
+    padding: 20px 22px;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    transition: border-color 0.3s, transform 0.3s;
+}
+
+.vuln-card:hover {
+    border-color: var(--border-glow);
+    transform: translateY(-3px);
+}
+
+.vuln-icon {
+    font-size: 1.5rem;
+    margin-bottom: 10px;
+}
+
+.vuln-title {
+    font-size: 0.9rem;
+    font-weight: 700;
+    margin-bottom: 6px;
+}
+
+.vuln-desc {
+    font-size: 0.82rem;
+    color: var(--text-2);
+    line-height: 1.6;
+}
+
+/* ── BibTeX ───────────────────────────────────────────────── */
+#bibtex .bib-card {
+    max-width: 760px;
+    margin: 48px auto 0;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    box-shadow: var(--shadow-card);
+}
+
+.bib-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 20px;
+    background: rgba(255, 255, 255, 0.03);
+    border-bottom: 1px solid var(--border);
+}
+
+.bib-header span {
+    font-size: 0.82rem;
+    color: var(--text-3);
+    font-family: var(--mono);
+}
+
+.copy-btn {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 14px;
+    border-radius: 6px;
+    background: rgba(56, 189, 248, 0.1);
+    border: 1px solid var(--border-glow);
+    color: var(--blue-1);
+    font-size: 0.8rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.copy-btn:hover {
+    background: rgba(56, 189, 248, 0.2);
+}
+
+.copy-btn.copied {
+    color: var(--green);
+    border-color: rgba(52, 211, 153, 0.4);
+    background: rgba(52, 211, 153, 0.1);
+}
+
+.bib-code {
+    padding: 24px 28px;
+    font-family: var(--mono);
+    font-size: 0.82rem;
+    color: var(--text-2);
+    line-height: 1.8;
+    white-space: pre;
+    overflow-x: auto;
+}
+
+.bib-key {
+    color: var(--blue-1);
+}
+
+.bib-val {
+    color: var(--green);
+}
+
+.bib-field {
+    color: var(--purple);
+}
+
+/* ── Footer ───────────────────────────────────────────────── */
+footer {
+    padding: 48px 0;
+    border-top: 1px solid var(--border);
+    background: rgba(0, 0, 0, 0.3);
+}
+
+.footer-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.footer-logo {
+    font-size: 1.3rem;
+    font-weight: 800;
+    background: linear-gradient(135deg, var(--blue-1), var(--cyan));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.footer-info {
+    color: var(--text-3);
+    font-size: 0.85rem;
+}
+
+.footer-info a {
+    color: var(--blue-1);
+    text-decoration: none;
+}
+
+.footer-links {
+    display: flex;
+    gap: 20px;
+}
+
+.footer-links a {
+    color: var(--text-3);
+    text-decoration: none;
+    font-size: 0.85rem;
+    transition: color 0.2s;
+}
+
+.footer-links a:hover {
+    color: var(--blue-1);
+}
+
+/* ── Scroll Reveal ────────────────────────────────────────── */
+.reveal {
+    opacity: 0;
+    transform: translateY(28px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+}
+
+.reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* ── Responsive ───────────────────────────────────────────── */
+@media (max-width: 768px) {
+    .nav-links {
+        display: none;
+    }
+
+    .method-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .pipeline-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .pipe-step {
+        border-radius: var(--radius-md) !important;
+        margin: 0;
+    }
+
+    #abstract .abstract-card {
+        padding: 28px 24px;
+    }
+
+    .footer-inner {
+        flex-direction: column;
+        text-align: center;
+    }
+}

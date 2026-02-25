@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description"
+        content="SafeTrans: LLM-assisted Transpilation from C to Rust — a framework for evaluating and improving LLM-based C-to-Rust code translation with guided repair." />
+    <meta name="keywords"
+        content="SafeTrans, C to Rust, LLM, transpilation, code translation, guided repair, memory safety, Rust, security" />
+    <title>SafeTrans — LLM-assisted C to Rust Transpilation</title>
+
+    <!-- Favicon (inline SVG) -->
+    <link rel="icon"
+        href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🦀</text></svg>" />
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap"
+        rel="stylesheet" />
+
+    <!-- Icons (Font Awesome) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+
+    <!-- Styles -->
+    <link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+
+    <!-- ══════════════════════════════════════════════════════════
+     NAVBAR
+══════════════════════════════════════════════════════════ -->
+    <nav id="navbar">
+        <div class="container nav-inner">
+            <a href="#hero" class="nav-logo">SafeTrans</a>
+            <ul class="nav-links">
+                <li><a href="#abstract">Overview</a></li>
+                <li><a href="#pipeline">Pipeline</a></li>
+                <li><a href="#results">Results</a></li>
+                <li><a href="#vulnerability">Security</a></li>
+                <li><a href="#bibtex">Cite</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- ══════════════════════════════════════════════════════════
+     HERO
+══════════════════════════════════════════════════════════ -->
+    <section id="hero">
+        <div class="hero-bg"></div>
+        <div class="container hero-content">
+
+            <!-- Title -->
+            <h1 class="hero-title">
+                <span class="text-gradient">SafeTrans</span>
+            </h1>
+            <p class="hero-subtitle">
+                LLM-assisted Transpilation from C to Rust — a framework for automating
+                C-to-Rust translation with iterative guided repair and security analysis.
+            </p>
+
+            <!-- Authors + affiliations -->
+            <p class="hero-authors">
+                Muhammad Farrukh<sup>1</sup>
+                <span class="author-sep">·</span>
+                Baris Coskun<sup>2</sup>
+                <span class="author-sep">·</span>
+                Tapti Palit<sup>3</sup>
+                <span class="author-sep">·</span>
+                Michalis Polychronakis<sup>1</sup>
+            </p>
+            <p class="hero-affils">
+                <span><sup>1</sup> Stony Brook University</span>
+                <span class="affil-sep">·</span>
+                <span><sup>2</sup> Amazon Web Services</span>
+                <span class="affil-sep">·</span>
+                <span><sup>3</sup> UC Davis</span>
+            </p>
+
+            <!-- Buttons -->
+            <div class="btn-row">
+                <a href="assets/paper.pdf" target="_blank" class="btn btn-primary" id="btn-paper">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z" />
+                        <polyline points="14 2 14 8 20 8" />
+                        <line x1="16" y1="13" x2="8" y2="13" />
+                        <line x1="16" y1="17" x2="8" y2="17" />
+                        <polyline points="10 9 9 9 8 9" />
+                    </svg>
+                    Read Paper
+                </a>
+                <a href="https://github.com/FarrukhCyber/SafeTrans" target="_blank" class="btn btn-outline"
+                    id="btn-github">
+                    <svg viewBox="0 0 24 24" fill="currentColor">
+                        <path
+                            d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z" />
+                    </svg>
+                    GitHub
+                </a>
+                <a href="https://dl.acm.org/doi/10.1145/3786180.3788317" target="_blank" class="btn btn-outline"
+                    id="btn-acm">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="10" />
+                        <line x1="2" y1="12" x2="22" y2="12" />
+                        <path
+                            d="M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z" />
+                    </svg>
+                    ACM DL
+                </a>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- ══════════════════════════════════════════════════════════
+     ABSTRACT
+══════════════════════════════════════════════════════════ -->
+    <section id="abstract">
+        <div class="container">
+            <div class="text-center reveal">
+                <h2 class="section-title">Overview</h2>
+            </div>
+            <div class="abstract-card reveal">
+                <p>
+                    Rust is a strong contender for a memory-safe alternative to C as a "systems" language,
+                    but porting the vast amount of existing C code to Rust remains daunting.
+                    In this paper, we evaluate the potential of large language models (LLMs) to
+                    automate the transpilation of C code to idiomatic Rust.
+                    We present <em>SafeTrans</em>, a generic framework that leverages LLMs to
+                    (i)&nbsp;transpile C code into Rust, and (ii)&nbsp;iteratively repair compilation and runtime
+                    errors.
+                    A key novelty of our approach is a few-shot <em>guided repair</em> technique for translation errors,
+                    which provides contextual information and example code snippets for specific error types,
+                    guiding the LLM toward the correct solution.
+                    Another novel aspect of our work is the evaluation of the security implications of the
+                    transpilation process, showing how some vulnerability classes in C persist in the translated Rust
+                    code.
+                    SafeTrans was evaluated with six leading LLMs on 2,653 C programs and two real-world C projects.
+                    Our results show that iterative repair improves the rate of successful translations from
+                    <em>54% to 80%</em> for the best-performing LLM (<em>gpt-4o</em>).
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ══════════════════════════════════════════════════════════
+     STATS
+══════════════════════════════════════════════════════════ -->
+    <section id="stats">
+        <div class="container">
+            <div class="text-center reveal" style="margin-bottom: 40px;">
+                <p class="section-label">Numbers</p>
+                <h2 class="section-title">At a Glance</h2>
+            </div>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon">🔬</div>
+                    <div class="stat-value" data-target="15918" data-suffix="">0</div>
+                    <div class="stat-label">Total Translations</div>
+                    <div class="stat-sub">across all LLMs and programs</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">📄</div>
+                    <div class="stat-value" data-target="2653" data-suffix="">0</div>
+                    <div class="stat-label">C Programs Evaluated</div>
+                    <div class="stat-sub">from the CodeNet dataset</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">🤖</div>
+                    <div class="stat-value" data-target="6" data-suffix="">0</div>
+                    <div class="stat-label">LLMs Benchmarked</div>
+                    <div class="stat-sub">GPT-4o, DeepSeek, Llama3 &amp; more</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">📈</div>
+                    <div class="stat-value" data-target="80" data-suffix="%">0</div>
+                    <div class="stat-label">Peak Translation Success</div>
+                    <div class="stat-sub">up from 54% baseline (gpt-4o)</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">🔧</div>
+                    <div class="stat-value" data-target="93.5" data-suffix="%" data-decimals="1">0</div>
+                    <div class="stat-label">Compilation Repair Rate</div>
+                    <div class="stat-sub">gpt-4o with guided repair</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">🛡️</div>
+                    <div class="stat-value" data-target="10375" data-suffix="">0</div>
+                    <div class="stat-label">Vulnerabilities Analyzed</div>
+                    <div class="stat-sub">in source C programs</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ══════════════════════════════════════════════════════════
+     PIPELINE
+══════════════════════════════════════════════════════════ -->
+    <section id="pipeline">
+        <div class="container">
+            <div class="text-center reveal">
+                <p class="section-label">Framework</p>
+                <h2 class="section-title">Methodology</h2>
+                <p class="section-desc">
+                    SafeTrans orchestrates a four-phase automated pipeline to translate C programs
+                    into idiomatic, safe Rust.
+                </p>
+            </div>
+
+            <!-- Actual methodology diagram -->
+            <div class="diag-wrap reveal">
+                <img src="assets/methodology.png"
+                    alt="SafeTrans methodology diagram — Base Transpilation, Compilation Validation, Compilation Repair, and Runtime Testing phases"
+                    class="diag-img" />
+            </div>
+
+            <!-- Step descriptions below the diagram -->
+            <div class="pipe-steps-list reveal">
+                <div class="pipe-list-item">
+                    <div class="pipe-num">1</div>
+                    <div>
+                        <div class="pipe-title">Transpilation</div>
+                        <div class="pipe-desc">An LLM receives the C source code and generates an initial Rust
+                            translation, instructed to produce safe, idiomatic Rust without <code>unsafe</code> blocks.
+                        </div>
+                    </div>
+                </div>
+                <div class="pipe-list-item">
+                    <div class="pipe-num">2</div>
+                    <div>
+                        <div class="pipe-title">Compilation</div>
+                        <div class="pipe-desc">The translated Rust code is compiled with <code>rustc</code>. Successful
+                            binaries advance to validation; failures trigger the repair phase.</div>
+                    </div>
+                </div>
+                <div class="pipe-list-item">
+                    <div class="pipe-num">3</div>
+                    <div>
+                        <div class="pipe-title">Iterative Repair</div>
+                        <div class="pipe-desc"><strong>Basic Repair</strong> feeds compiler errors back to the LLM
+                            iteratively (up to 5 rounds). <strong>Guided Repair</strong> then augments prompts with
+                            error-specific instructions and few-shot examples targeting the top-8 persistent Rust error
+                            types.</div>
+                    </div>
+                </div>
+                <div class="pipe-list-item">
+                    <div class="pipe-num">4</div>
+                    <div>
+                        <div class="pipe-title">Validation</div>
+                        <div class="pipe-desc">The compiled Rust program is executed against the original C program's
+                            unit tests. Runtime or test-case failures trigger another iterative repair cycle with
+                            dynamic error feedback.</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+
+    <!-- ══════════════════════════════════════════════════════════
+     RESULTS
+══════════════════════════════════════════════════════════ -->
+    <section id="results">
+        <div class="container">
+            <div class="text-center reveal">
+                <p class="section-label">Evaluation</p>
+                <h2 class="section-title">LLM Performance Comparison</h2>
+                <p class="section-desc">
+                    Compilation repair rate and final translation success rate across six LLMs
+                    after the complete SafeTrans pipeline.
+                </p>
+            </div>
+
+            <div class="table-wrap reveal">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>LLM</th>
+                            <th>Base CA</th>
+                            <th>Final CA</th>
+                            <th>Improvement</th>
+                            <th>Repair Rate</th>
+                            <th class="bar-cell">Success Rate</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="highlight-row">
+                            <td>GPT-4o <span class="tag-best">Best</span></td>
+                            <td>54%</td>
+                            <td>80%</td>
+                            <td style="color: var(--green)">+26%</td>
+                            <td>93.5%</td>
+                            <td class="bar-cell">
+                                <div class="bar-wrap">
+                                    <div class="bar-bg">
+                                        <div class="bar-fill" data-width="80" style="width:0%"></div>
+                                    </div>
+                                    <span class="bar-val">80%</span>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr class="highlight-row">
+                            <td>DeepSeek-V3</td>
+                            <td>49%</td>
+                            <td>79%</td>
+                            <td style="color: var(--green)">+30%</td>
+                            <td>89.8%</td>
+                            <td class="bar-cell">
+                                <div class="bar-wrap">
+                                    <div class="bar-bg">
+                                        <div class="bar-fill" data-width="79" style="width:0%"></div>
+                                    </div>
+                                    <span class="bar-val">79%</span>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Codestral</td>
+                            <td>~44%</td>
+                            <td>~66%</td>
+                            <td style="color: var(--green)">+22%</td>
+                            <td>85.8%</td>
+                            <td class="bar-cell">
+                                <div class="bar-wrap">
+                                    <div class="bar-bg">
+                                        <div class="bar-fill" data-width="66" style="width:0%"></div>
+                                    </div>
+                                    <span class="bar-val">~66%</span>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>DeepSeek-Coder</td>
+                            <td>~15%</td>
+                            <td>~34%</td>
+                            <td style="color: var(--green)">+19%</td>
+                            <td>55.6%</td>
+                            <td class="bar-cell">
+                                <div class="bar-wrap">
+                                    <div class="bar-bg">
+                                        <div class="bar-fill" data-width="34" style="width:0%"></div>
+                                    </div>
+                                    <span class="bar-val">~34%</span>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Qwen2.5-Coder</td>
+                            <td>~17%</td>
+                            <td>~34%</td>
+                            <td style="color: var(--green)">+17%</td>
+                            <td>62.5%</td>
+                            <td class="bar-cell">
+                                <div class="bar-wrap">
+                                    <div class="bar-bg">
+                                        <div class="bar-fill" data-width="34" style="width:0%"></div>
+                                    </div>
+                                    <span class="bar-val">~34%</span>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Llama3 (70B)</td>
+                            <td>~9%</td>
+                            <td>~21%</td>
+                            <td style="color: var(--green)">+12%</td>
+                            <td>58.1%</td>
+                            <td class="bar-cell">
+                                <div class="bar-wrap">
+                                    <div class="bar-bg">
+                                        <div class="bar-fill" data-width="21" style="width:0%"></div>
+                                    </div>
+                                    <span class="bar-val">~21%</span>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Key findings -->
+            <div class="method-grid reveal" style="margin-top: 32px;">
+                <div class="method-card">
+                    <h3><span>🏆</span> Key Finding: Guided Repair Works</h3>
+                    <p>
+                        Combining basic and guided repair achieves up to <strong>25% improvement</strong>
+                        in computational accuracy for top LLMs. Even smaller models nearly double their
+                        success rate, demonstrating broad applicability of the approach.
+                    </p>
+                </div>
+                <div class="method-card">
+                    <h3><span>🔍</span> Key Finding: Scalability</h3>
+                    <p>
+                        SafeTrans was evaluated on two real-world libraries (<code>url_parser</code> and
+                        <code>avl_tree</code>). Unlike competing tools, SafeTrans successfully compiles
+                        both while producing fully safe Rust without <code>unsafe</code> blocks.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ══════════════════════════════════════════════════════════
+     VULNERABILITY
+══════════════════════════════════════════════════════════ -->
+    <section id="vulnerability">
+        <div class="container">
+            <div class="text-center reveal">
+                <p class="section-label">Security Analysis</p>
+                <h2 class="section-title">Vulnerability Implications</h2>
+                <p class="section-desc">
+                    SafeTrans uniquely evaluates the security implications of C-to-Rust transpilation,
+                    examining how memory vulnerabilities in C programs behave in translated Rust code.
+                </p>
+            </div>
+
+            <div class="vuln-grid">
+                <div class="vuln-card">
+                    <div class="vuln-icon">🔍</div>
+                    <div class="vuln-title">10,375 Vulnerabilities Found</div>
+                    <div class="vuln-desc">
+                        We identified 10,375 vulnerabilities in the 2,653 source C programs,
+                        including out-of-bounds accesses, null-pointer dereferences, and use-after-free bugs.
+                    </div>
+                </div>
+                <div class="vuln-card">
+                    <div class="vuln-icon">⚠️</div>
+                    <div class="vuln-title">Persistence in Rust Translations</div>
+                    <div class="vuln-desc">
+                        Some vulnerability classes present in C code persist in the translated Rust programs,
+                        demonstrating that LLM-generated translations require further processing to mitigate
+                        source program vulnerabilities.
+                    </div>
+                </div>
+                <div class="vuln-card">
+                    <div class="vuln-icon">🔬</div>
+                    <div class="vuln-title">Novel Security Perspective</div>
+                    <div class="vuln-desc">
+                        Unlike prior transpilation studies focused solely on correctness, SafeTrans
+                        is the first to systematically evaluate the security implications of LLM-based
+                        C-to-Rust translation at scale.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ══════════════════════════════════════════════════════════
+     BIBTEX
+══════════════════════════════════════════════════════════ -->
+    <section id="bibtex">
+        <div class="container">
+            <div class="text-center reveal">
+                <p class="section-label">Citation</p>
+                <h2 class="section-title">Cite SafeTrans</h2>
+                <p class="section-desc">
+                    If you use SafeTrans in your research, please cite our paper.
+                </p>
+            </div>
+
+            <div class="bib-card reveal">
+                <div class="bib-header">
+                    <span>BibTeX</span>
+                    <button class="copy-btn" id="copy-bibtex-btn">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14"
+                            height="14">
+                            <rect x="9" y="9" width="13" height="13" rx="2" />
+                            <path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1" />
+                        </svg>
+                        Copy BibTeX
+                    </button>
+                </div>
+                <pre class="bib-code"><span class="bib-key">@inproceedings</span>{<span class="bib-val">farrukh2026safetrans</span>,
+  <span class="bib-field">author</span>    = {<span class="bib-val">Farrukh, Muhammad and Coskun, Baris and Palit, Tapti and Polychronakis, Michalis</span>},
+  <span class="bib-field">title</span>     = {<span class="bib-val">SafeTrans: LLM-assisted Transpilation from C to Rust</span>},
+  <span class="bib-field">booktitle</span> = {<span class="bib-val">Proceedings of the 1st Workshop on Code Translation, Transformation, and Modernization (ReCode '26)</span>},
+  <span class="bib-field">year</span>      = {<span class="bib-val">2026</span>},
+  <span class="bib-field">doi</span>       = {<span class="bib-val">10.1145/3786180.3788317</span>},
+  <span class="bib-field">publisher</span> = {<span class="bib-val">ACM</span>},
+  <span class="bib-field">address</span>   = {<span class="bib-val">Rio de Janeiro, Brazil</span>}
+}</pre>
+            </div>
+        </div>
+    </section>
+
+    <script src="script.js"></script>
+</body>
+
+</html>
